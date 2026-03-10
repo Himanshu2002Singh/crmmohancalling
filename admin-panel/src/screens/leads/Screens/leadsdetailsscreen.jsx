@@ -72,17 +72,16 @@ const downloadexcel = () => {
     "Phone": lead?.number || "N/A",
     "Assigned To": `${lead?.person_id || "N/A"}-${lead?.owner || "N/A"}`,
     "Status": lead?.status || "N/A",
-    "Source": lead?.source || "N/A",
-    "Priority": lead?.priority || "N/A",
+    "Employment Type": lead?.employment_type || "N/A",
+    "Company Name": lead?.company_name || "N/A",
+    "Estimated Salary": lead?.est_salary || "N/A",
     "Next Meeting": lead?.next_meeting 
       ? new Date(lead.next_meeting).toLocaleString("en-IN", {
           dateStyle: "medium",
           timeStyle: "short",
         })
       : "N/A",
-    "Loan Type": lead?.loan_type || "N/A",
-    "Estimated Budget": lead?.est_budget || "N/A",
-    "Reference": lead?.refrence || "N/A",
+    "Date of Birth": lead?.dob || "N/A",
     "Address": lead?.address || "N/A",
     "Description": lead?.description || "N/A",
     "Created At": lead?.createdAt
@@ -185,19 +184,19 @@ const downloadexcel = () => {
           <p><strong>Phone:</strong> {lead.number}</p>
           <p><strong>Assigned to :</strong> {lead.person_id}-{lead.owner}</p>
           <p><strong>Status:</strong> {lead.status}</p>
-          <p><strong>Source:</strong> {lead.source}</p>
-          <p><strong>Priority:</strong> {lead.priority}</p>
+          <p><strong>Employment Type:</strong> {lead.employment_type || "N/A"}</p>
+          <p><strong>Company Name:</strong> {lead.company_name || "N/A"}</p>
+          <p><strong>Estimated Salary:</strong> {lead.est_salary || "N/A"}</p>
 <p><strong>Next Meeting:</strong> 
   {lead.next_meeting
     ? new Date(lead.next_meeting).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })
     : "Not Scheduled"}
-</p>          <p><strong>Loan Type:</strong> {lead.loan_type}</p>
-          <p><strong>Estimated Budget:</strong> {lead.est_budget}</p>
-          <p><strong>Refrence:</strong> {lead.refrence}</p>
-          <p><strong>Remark:</strong> {lead.remark}</p>
+</p>
+          <p><strong>Date of Birth:</strong> {lead.dob ? new Date(lead.dob).toLocaleDateString("en-IN") : "N/A"}</p>
+          <p><strong>Remark:</strong> {lead.remark || "N/A"}</p>
           <p><strong>Created At:</strong> {new Date(lead.createdAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</p>
-          <p><strong>Address:</strong> {lead.address}</p>
-          <p><strong>Description:</strong> {lead.description}</p>
+          <p><strong>Address:</strong> {lead.address || "N/A"}</p>
+          <p><strong>Description:</strong> {lead.description || "N/A"}</p>
         </div>
       ) : (
         <p>Loading Lead details...</p>

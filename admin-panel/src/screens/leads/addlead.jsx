@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as XLSX from "xlsx";
 import API_URL from "../../config";
 
 const AddLead = ({ handleCloseaddcallformModal, employees = [] }) => {
@@ -55,6 +56,9 @@ const AddLead = ({ handleCloseaddcallformModal, employees = [] }) => {
       return;
     }
 
+    // Get token from localStorage
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+
     const formDataToSend = new FormData();
     formDataToSend.append("file", excelFile);
     formDataToSend.append("userid", selectedEmployee);
@@ -63,6 +67,9 @@ const AddLead = ({ handleCloseaddcallformModal, employees = [] }) => {
     try {
       const response = await fetch(`${API_URL}/addLeadsFromExcel`, {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
         body: formDataToSend,
       });
 
@@ -78,6 +85,59 @@ const AddLead = ({ handleCloseaddcallformModal, employees = [] }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Download sample Excel template
+  const downloadTemplate = () => {
+    const sampleData = [
+      {
+        name: "John Doe",
+        number: "9876543210",
+        email: "john@example.com",
+        dob: "1990-05-15",
+        employment_type: "Salaried",
+        next_meeting: "2024-12-20",
+        address: "Delhi, India",
+        remark: "Interested in personal loan",
+        est_salary: "50000",
+        company_name: "ABC Corp",
+        description: "Looking for personal loan"
+      },
+      {
+        name: "Jane Smith",
+        number: "9876543211",
+        email: "jane@example.com",
+        dob: "1985-08-22",
+        employment_type: "Self-Employed",
+        next_meeting: "2024-12-22",
+        address: "Mumbai, India",
+        remark: "Looking for business loan",
+        est_salary: "80000",
+        company_name: "XYZ Ltd",
+        description: "Business expansion loan"
+      }
+    ];
+
+    const worksheet = XLSX.utils.json_to_sheet(sampleData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads Template");
+    
+    // Set column widths
+    worksheet['!cols'] = [
+      { wch: 15 }, // name
+      { wch: 15 }, // number
+      { wch: 25 }, // email
+      { wch: 12 }, // dob
+      { wch: 15 }, // employment_type
+      { wch: 15 }, // next_meeting
+      { wch: 20 }, // address
+      { wch: 25 }, // remark
+      { wch: 10 }, // est_salary
+      { wch: 15 }, // company_name
+      { wch: 25 }  // description
+    ];
+
+    XLSX.writeFile(workbook, "leads_template.xlsx");
   };
 
   return (
@@ -171,6 +231,14 @@ const AddLead = ({ handleCloseaddcallformModal, employees = [] }) => {
             disabled={isLoading}
           >
             {isLoading ? "Uploading..." : "Upload Leads"}
+          </button>
+
+          <button
+            type="button"
+            onClick={downloadTemplate}
+            className="w-full py-2 text-sm rounded-md text-blue-600 border border-blue-600 hover:bg-blue-50"
+          >
+            📥 Download Sample Template
           </button>
         </div>
       </div>

@@ -56,35 +56,43 @@ exports.importLeadsFromExcel = async (req, res) => {
         number,
         email,
         dob,
-        branch,
-        source,
-        priority,
         next_meeting,
         employment_type,
-        loan_term,
-        refrence,
         description,
         address,
-        loan_type,
-        est_budget,
         remark,
-        salary,
+        est_salary,
+        company_name,
       } = row;
 
       // 🔁 Skip if name or number missing
       if (!name || !number) continue;
 
-      // 🛠️ Manually add +1 day to dates if valid
+      // 🛠️ Handle date conversion - support both string and Date objects
       let dobDate = null;
-      if (dob instanceof Date && !isNaN(dob)) {
-        dob.setDate(dob.getDate() + 1);
-        dobDate = dob;
+      if (dob) {
+        if (dob instanceof Date && !isNaN(dob)) {
+          dobDate = dob;
+        } else if (typeof dob === 'string' && dob.includes('-')) {
+          // Try parsing string date like "1990-05-15"
+          const parsed = new Date(dob);
+          if (!isNaN(parsed)) {
+            dobDate = parsed;
+          }
+        }
       }
 
       let meetingDate = null;
-      if (next_meeting instanceof Date && !isNaN(next_meeting)) {
-        next_meeting.setDate(next_meeting.getDate() + 1);
-        meetingDate = next_meeting;
+      if (next_meeting) {
+        if (next_meeting instanceof Date && !isNaN(next_meeting)) {
+          meetingDate = next_meeting;
+        } else if (typeof next_meeting === 'string' && next_meeting.includes('-')) {
+          // Try parsing string date like "2024-12-20"
+          const parsed = new Date(next_meeting);
+          if (!isNaN(parsed)) {
+            meetingDate = parsed;
+          }
+        }
       }
 
       await Lead.create({
@@ -92,19 +100,13 @@ exports.importLeadsFromExcel = async (req, res) => {
         number,
         email,
         dob: dobDate,
-        branch,
-        source,
-        priority,
         next_meeting: meetingDate,
         employment_type,
-        loan_term,
-        refrence,
         description,
         address,
-        loan_type,
-        est_budget,
         remark,
-        salary,
+        est_salary,
+        company_name,
         status: "Fresh Lead",
         person_id: userid,
         owner: ownerName || "Unassigned",

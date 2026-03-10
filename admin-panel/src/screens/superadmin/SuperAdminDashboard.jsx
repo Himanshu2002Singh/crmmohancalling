@@ -329,7 +329,7 @@ function SuperAdminDashboard() {
                       <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
                       <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Company</th>
                       <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Role</th>
-                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Balance</th>
+                      {/* <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Balance</th> */}
                       <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
                       <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
@@ -350,7 +350,7 @@ function SuperAdminDashboard() {
                             {admin.role}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-sm">₹{parseFloat(admin.wallet_balance || 0).toFixed(2)}</td>
+                        {/* <td className="px-4 py-3 text-sm">₹{parseFloat(admin.wallet_balance || 0).toFixed(2)}</td> */}
                         <td className="px-4 py-3 text-sm">
                           <span className={`px-2 py-1 rounded text-xs ${
                             admin.is_active 

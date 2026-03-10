@@ -78,8 +78,11 @@ function AdminHome() {
       );
       setCalculatedPrice(response.data.amount);
     } catch (error) {
-      console.error('Error calculating price:', error);
-      alert('Failed to calculate price');
+      console.error('Error calculating price:', error.response);
+      // Show the exact error message from the API
+      console.log("===================>",error.response?.data?.message);
+      const errorMessage = error.response?.data?.message || 'Failed to calculate price';
+      alert(errorMessage);
     }
   };
 

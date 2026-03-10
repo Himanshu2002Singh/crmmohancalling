@@ -116,8 +116,11 @@ const handleAssignPerson = async (leadId, value) => {
   }, [employees]);
 
   const handleDeleteUser = async (leadId) => {
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
     try {
-      await toast.promise(axios.delete(`${API_URL}/delete-lead/${leadId}`), {
+      await toast.promise(axios.delete(`${API_URL}/delete-lead/${leadId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }), {
         pending: "Deleting user...",
         success: `Lead Id ${leadId} deleted successfully!`,
         error: "Error deleting user. Please try again.",
@@ -318,7 +321,7 @@ const handleDownloadExcel = () => {
                 </td>
 
                 <td className="p-4">
-                  <button className="mr-4" title="Edit">
+                  {/* <button className="mr-4" title="Edit">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-5 fill-blue-500 hover:fill-blue-700"
@@ -333,7 +336,7 @@ const handleDownloadExcel = () => {
                         data-original="#000000"
                       />
                     </svg>
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleDeleteUser(user.lead_id)}
                     className="mr-4"
