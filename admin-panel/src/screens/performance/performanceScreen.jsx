@@ -66,74 +66,56 @@ const PerformanceScreen = () => {
   const interestedLeads = leads.filter(lead => lead.status === 'Interested');
   const callBackLeads = leads.filter(lead => lead.status === 'Call Back');
   const noRequirementLeads = leads.filter(lead => lead.status === 'No Requirement');
-  const followUps = leads.filter(lead => lead.status === 'Follow up');
-  const documentRejects = leads.filter(lead => lead.status === 'Document Rejected');
-  const documentsPending = leads.filter(lead => lead.status === 'Document Pending');
-  const notPick = leads.filter(lead=> lead.status === 'Not Pick');
-  const notConnected = leads.filter(lead=> lead.status === 'Not Connected');
-  const fileLogins = leads.filter(lead => lead.status === 'File Login');
-  const loanSections = leads.filter(lead => lead.status === 'Loan Section');
-  const loanDisbursements = leads.filter(lead => lead.status === 'Loan Disbursement');
+  const lineUpLeads = leads.filter(lead => lead.status === 'LineUp');
+  const lineUpDropoutLeads = leads.filter(lead => lead.status === 'LineUp Dropout');
+  const interviewRejectedLeads = leads.filter(lead => lead.status === 'Interview Rejected');
+  const interviewPendingLeads = leads.filter(lead => lead.status === 'Interview Pending');
+  const interviewDoneLeads = leads.filter(lead => lead.status === 'Interview Done');
+  const interviewSelectedLeads = leads.filter(lead => lead.status === 'Interview Selected');
+  const joinedLeads = leads.filter(lead => lead.status === 'Joined');
+  const oneMonthCompletedLeads = leads.filter(lead => lead.status === '1 Month Completed');
+  const twoMonthsCompletedLeads = leads.filter(lead => lead.status === '2 Months Completed');
+  const threeMonthsCompletedLeads = leads.filter(lead => lead.status === '3 Months Completed');
 
-  // Loan type counts
-  // const homeLoanLeads = leads.filter(lead => lead.loan_type === 'Home Loan');
-  // const mortgageLoanLeads = leads.filter(lead => lead.loan_type === 'Mortgage Loan');
-  // const userCarLoanLeads = leads.filter(lead => lead.loan_type === 'User Car Loan');
-  // const businessLoanLeads = leads.filter(lead => lead.loan_type === 'Business Loan');
-  // const personalLoanLeads = leads.filter(lead => lead.loan_type === 'Personal Loan');
-  // const dodLoanLeads = leads.filter(lead => lead.loan_type === 'DOD');
-  // const ccOdLeads = leads.filter(lead => lead.loan_type === 'CC/OD');
-  // const cgtmsmeLeads = leads.filter(lead => lead.loan_type === 'CGTMSME');
-  // const mutualFundLeads = leads.filter(lead => lead.loan_type === 'Mutual Fund');
-  // const insuranceLeads = leads.filter(lead => lead.loan_type === 'Insurance');
-  // const otherLeads = leads.filter(lead => lead.loan_type === 'Other');
-
-  // Data for charts
+  // Task status data for chart
   const taskStatusData = [
     { name: 'Initial', value: initialTasks, color: '#f59e0b' },
     { name: 'On Going', value: onGoingTasks, color: '#3b82f6' },
     { name: 'Completed', value: completedTasks, color: '#10b981' }
   ];
 
+  // Attendance status data for chart
   const attendanceData = [
     { name: 'Present', value: fullAttendance, color: '#10b981' },
     { name: 'Late', value: lateAttendance, color: '#f59e0b' },
   ];
 
+  // Lead status data for chart
   const leadStatusData = [
     { name: 'Fresh Leads', value: freshLeads, color: '#f59e0b' },
-    { name: "Interested", value: interestedLeads.length, color: "#3b82f6" },
-    { name: "Call Back", value: callBackLeads.length, color: "#60a5fa" },
-    { name: "Follow up", value: followUps.length, color: "#a5b4fc" },
-    { name: "No Requirement", value: noRequirementLeads.length, color: "#f87171" },
-    { name: "Document Reject", value: documentRejects.length, color: "#10b981" },
-    { name: "Document Pending", value: documentsPending.length, color: "#f59e0b" },
-    { name: "Not Pick", value: notPick.length, color: "#3b82f6" },
-    { name: "Not Connected", value: notConnected.length, color: "#60a5fa" },
-    { name: "File Login", value: fileLogins.length, color: "#6366f1" },
-    { name: "Loan Section", value: loanSections.length, color: "#ec4899" },
-    { name: "Loan Disbursement", value: loanDisbursements.length, color: "#22d3ee" }
+    { name: "Interested", value: interestedLeads.length, color: "#10b981" },
+    { name: "Call Back", value: callBackLeads.length, color: "#3b82f6" },
+    { name: "No Requirement", value: noRequirementLeads.length, color: "#ef4444" },
+    { name: "LineUp", value: lineUpLeads.length, color: "#8b5cf6" },
+    { name: "LineUp Dropout", value: lineUpDropoutLeads.length, color: "#f97316" },
+    { name: "Interview Rejected", value: interviewRejectedLeads.length, color: "#dc2626" },
+    { name: "Interview Pending", value: interviewPendingLeads.length, color: "#f59e0b" },
+    { name: "Interview Done", value: interviewDoneLeads.length, color: "#06b6d4" },
+    { name: "Interview Selected", value: interviewSelectedLeads.length, color: "#14b8a6" },
+    { name: "Joined", value: joinedLeads.length, color: "#22c55e" },
+    { name: "1 Month Completed", value: oneMonthCompletedLeads.length, color: "#84cc16" },
+    { name: "2 Months Completed", value: twoMonthsCompletedLeads.length, color: "#a3e635" },
+    { name: "3 Months Completed", value: threeMonthsCompletedLeads.length, color: "#eab308" }
   ];
-
-  // const loanTypeData = [
-  //   { name: 'Home Loans', value: homeLoanLeads.length, color: '#3b82f6' },
-  //   { name: 'User Car Loans', value: userCarLoanLeads.length, color: '#f97316' },
-  //   { name: 'Business Loans', value: businessLoanLeads.length, color: '#f59e0b' },
-  //   { name: 'Personal Loans', value: personalLoanLeads.length, color: '#10b981' },
-  //   { name: 'DOD Loans', value: dodLoanLeads.length, color: '#f43f5e' },
-  //   { name: 'Mortgage Loans', value: mortgageLoanLeads.length, color: '#8b5cf6' },
-  //   { name: 'CC/OD', value: ccOdLeads.length, color: '#4ade80' },
-  //   { name: 'CGTMSME', value: cgtmsmeLeads.length, color: '#a78bfa' },
-  //   { name: 'Mutual Fund', value: mutualFundLeads.length, color: '#8b5cf6' },
-  //   { name: 'Insurance', value: insuranceLeads.length, color: '#ec4899' },
-  //   { name: 'Other', value: otherLeads.length, color: '#f43f5e' }
-  // ];
 
   // Fetch all employees on component mount
   useEffect(() => {
     const fetchAllEmployees = async () => {
       try {
-        const response = await axios.get(`${API_URL}/employees`);
+        const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+        const response = await axios.get(`${API_URL}/employees`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setAllEmployees(response.data.employees);
       } catch (error) {
         console.error("Error fetching employees", error);
@@ -145,11 +127,15 @@ const PerformanceScreen = () => {
     fetchAllEmployees();
   }, []);
 
-  // Set default dates (last 30 days)
+  // Set default dates (current month)
   useEffect(() => {
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 30);
+    const now = new Date();
+    
+    // First day of current month
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    // Last day of current month
+    const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     
     const formatDate = (date) => {
       const year = date.getFullYear();
@@ -180,14 +166,15 @@ const PerformanceScreen = () => {
         endDate: toDate,
         userId : employee.emp_id
       };
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
 
       const [callsRes, tasksRes, leadsRes, attendanceRes] = await Promise.all([
-        axios.get(`${API_URL}/filterCalls/${employee.emp_id}`, { params }),
-        axios.get(`${API_URL}/task/${employee.emp_id}`, { params }),
+        axios.get(`${API_URL}/filterCalls/${employee.emp_id}`, { params, headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${API_URL}/task/${employee.emp_id}`, { params, headers: { Authorization: `Bearer ${token}` } }),
         
-        axios.get(`${API_URL}/getLeadsByEmpIdAndDate/${employee.emp_id}`, { params }),
+        axios.get(`${API_URL}/getLeadsByEmpIdAndDate/${employee.emp_id}`, { params, headers: { Authorization: `Bearer ${token}` } }),
 
-        axios.get(`${API_URL}/monthlyattendance/2025-01`, { params }),
+        axios.get(`${API_URL}/monthlyattendance/2025-01`, { params, headers: { Authorization: `Bearer ${token}` } }),
       ]);
 
       setCalls(callsRes.data);

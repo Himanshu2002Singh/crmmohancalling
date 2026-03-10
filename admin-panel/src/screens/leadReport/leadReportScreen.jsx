@@ -39,24 +39,33 @@ const LeadsReport = () => {
     "Interested",
     "Call Back",
     "No Requirement",
-    "Follow up",
-    "Document Rejected",
-    "Document Pending",
-    "Not Pick",
-    "Not Connected",
-    "File Login",
-    "Loan Section",
-    "Loan Disbursement"
+    "LineUp",
+    "LineUp Dropout",
+    "Interview Rejected",
+    "Interview Pending",
+    "Interview Done",
+    "Interview Selected",
+    "Joined",
+    "1 Month Completed",
+    "2 Months Completed",
+    "3 Months Completed"
   ];
 
-  // Set default date range (last 30 days)
+  // Set default date range (current month)
   useEffect(() => {
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 30);
+    const now = new Date();
+    
+    // First day of current month
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    // Last day of current month
+    const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     
     const formatDate = (date) => {
-      return date.toISOString().split('T')[0];
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     };
 
     setDateRange({
@@ -68,7 +77,10 @@ const LeadsReport = () => {
   // Fetch all employees
   const fetchAllEmployees = async () => {
     try {
-      const response = await axios.get(`${API_URL}/employees`);
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+      const response = await axios.get(`${API_URL}/employees`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setAllEmployees(response.data.employees);
     } catch (error) {
       console.error("Error fetching employees", error);
@@ -92,8 +104,12 @@ const LeadsReport = () => {
           endDate: dateRange.endDate,
           status: selectedStatus === "All" ? "" : selectedStatus
         };
+        const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
         try {
-          const leadResponse = await axios.get(`${API_URL}/getFilteredLeads`, { params });
+          const leadResponse = await axios.get(`${API_URL}/getFilteredLeads`, { 
+            params,
+            headers: { Authorization: `Bearer ${token}` },
+          });
           setLeadsData(leadResponse.data.leads);
           setCurrentPage(1); // Reset to first page when new data is fetched
         } catch (error) {
@@ -129,56 +145,60 @@ const LeadsReport = () => {
   const interestedLeads = leadsData.filter(lead => lead.status === 'Interested');
   const callBackLeads = leadsData.filter(lead => lead.status === 'Call Back');
   const noRequirementLeads = leadsData.filter(lead => lead.status === 'No Requirement');
-  const followUps = leadsData.filter(lead => lead.status === 'Follow up');
-  const documentRejects = leadsData.filter(lead => lead.status === 'Document Rejected');
-  const documentsPending = leadsData.filter(lead => lead.status === 'Document Pending');
-  const notPick = leadsData.filter(lead=> lead.status === 'Not Pick');
-  const notConnected = leadsData.filter(lead=> lead.status === 'Not Connected');
-  const fileLogins = leadsData.filter(lead => lead.status === 'File Login');
-  const loanSections = leadsData.filter(lead => lead.status === 'Loan Section');
-  const loanDisbursements = leadsData.filter(lead => lead.status === 'Loan Disbursement');
+  const lineUpLeads = leadsData.filter(lead => lead.status === 'LineUp');
+  const lineUpDropoutLeads = leadsData.filter(lead => lead.status === 'LineUp Dropout');
+  const interviewRejectedLeads = leadsData.filter(lead => lead.status === 'Interview Rejected');
+  const interviewPendingLeads = leadsData.filter(lead => lead.status === 'Interview Pending');
+  const interviewDoneLeads = leadsData.filter(lead => lead.status === 'Interview Done');
+  const interviewSelectedLeads = leadsData.filter(lead => lead.status === 'Interview Selected');
+  const joinedLeads = leadsData.filter(lead => lead.status === 'Joined');
+  const oneMonthCompletedLeads = leadsData.filter(lead => lead.status === '1 Month Completed');
+  const twoMonthsCompletedLeads = leadsData.filter(lead => lead.status === '2 Months Completed');
+  const threeMonthsCompletedLeads = leadsData.filter(lead => lead.status === '3 Months Completed');
 
   const leadStatusData = [
     { name: 'Fresh Leads', value: freshLeads, color: '#f59e0b' },
-    { name: "Interested", value: interestedLeads.length, color: "#3b82f6" },
-    { name: "Call Back", value: callBackLeads.length, color: "#60a5fa" },
-    { name: "Follow up", value: followUps.length, color: "#a5b4fc" },
-    { name: "No Requirement", value: noRequirementLeads.length, color: "#f87171" },
-    { name: "Document Reject", value: documentRejects.length, color: "#10b981" },
-    { name: "Document Pending", value: documentsPending.length, color: "#f59e0b" },
-    { name: "Not Pick", value: notPick.length, color: "#3b82f6" },
-    { name: "Not Connected", value: notConnected.length, color: "#60a5fa" },
-    { name: "File Login", value: fileLogins.length, color: "#6366f1" },
-    { name: "Loan Section", value: loanSections.length, color: "#ec4899" },
-    { name: "Loan Disbursement", value: loanDisbursements.length, color: "#22d3ee" }
+    { name: "Interested", value: interestedLeads.length, color: "#10b981" },
+    { name: "Call Back", value: callBackLeads.length, color: "#3b82f6" },
+    { name: "No Requirement", value: noRequirementLeads.length, color: "#ef4444" },
+    { name: "LineUp", value: lineUpLeads.length, color: "#8b5cf6" },
+    { name: "LineUp Dropout", value: lineUpDropoutLeads.length, color: "#f97316" },
+    { name: "Interview Rejected", value: interviewRejectedLeads.length, color: "#dc2626" },
+    { name: "Interview Pending", value: interviewPendingLeads.length, color: "#f59e0b" },
+    { name: "Interview Done", value: interviewDoneLeads.length, color: "#06b6d4" },
+    { name: "Interview Selected", value: interviewSelectedLeads.length, color: "#14b8a6" },
+    { name: "Joined", value: joinedLeads.length, color: "#22c55e" },
+    { name: "1 Month Completed", value: oneMonthCompletedLeads.length, color: "#84cc16" },
+    { name: "2 Months Completed", value: twoMonthsCompletedLeads.length, color: "#a3e635" },
+    { name: "3 Months Completed", value: threeMonthsCompletedLeads.length, color: "#eab308" }
   ];
 
-  // Loan type counts
-  const homeLoanLeads = leadsData.filter(lead => lead.loan_type === 'Home Loan');
-  const mortgageLoanLeads = leadsData.filter(lead => lead.loan_type === 'Mortgage Loan');
-  const userCarLoanLeads = leadsData.filter(lead => lead.loan_type === 'User Car Loan');
-  const businessLoanLeads = leadsData.filter(lead => lead.loan_type === 'Business Loan');
-  const personalLoanLeads = leadsData.filter(lead => lead.loan_type === 'Personal Loan');
-  const dodLoanLeads = leadsData.filter(lead => lead.loan_type === 'DOD');
-  const ccOdLeads = leadsData.filter(lead => lead.loan_type === 'CC/OD');
-  const cgtmsmeLeads = leadsData.filter(lead => lead.loan_type === 'CGTMSME');
-  const mutualFundLeads = leadsData.filter(lead => lead.loan_type === 'Mutual Fund');
-  const insuranceLeads = leadsData.filter(lead => lead.loan_type === 'Insurance');
-  const otherLeads = leadsData.filter(lead => lead.loan_type === 'Other');
+  // Loan type counts - Removed as not needed
+  // const homeLoanLeads = leadsData.filter(lead => lead.loan_type === 'Home Loan');
+  // const mortgageLoanLeads = leadsData.filter(lead => lead.loan_type === 'Mortgage Loan');
+  // const userCarLoanLeads = leadsData.filter(lead => lead.loan_type === 'User Car Loan');
+  // const businessLoanLeads = leadsData.filter(lead => lead.loan_type === 'Business Loan');
+  // const personalLoanLeads = leadsData.filter(lead => lead.loan_type === 'Personal Loan');
+  // const dodLoanLeads = leadsData.filter(lead => lead.loan_type === 'DOD');
+  // const ccOdLeads = leadsData.filter(lead => lead.loan_type === 'CC/OD');
+  // const cgtmsmeLeads = leadsData.filter(lead => lead.loan_type === 'CGTMSME');
+  // const mutualFundLeads = leadsData.filter(lead => lead.loan_type === 'Mutual Fund');
+  // const insuranceLeads = leadsData.filter(lead => lead.loan_type === 'Insurance');
+  // const otherLeads = leadsData.filter(lead => lead.loan_type === 'Other');
 
-  const loanTypeData = [
-    { name: 'Home Loans', value: homeLoanLeads.length, color: '#3b82f6' },
-    { name: 'User Car Loans', value: userCarLoanLeads.length, color: '#f97316' },
-    { name: 'Business Loans', value: businessLoanLeads.length, color: '#f59e0b' },
-    { name: 'Personal Loans', value: personalLoanLeads.length, color: '#10b981' },
-    { name: 'DOD Loans', value: dodLoanLeads.length, color: '#f43f5e' },
-    { name: 'Mortgage Loans', value: mortgageLoanLeads.length, color: '#8b5cf6' },
-    { name: 'CC/OD', value: ccOdLeads.length, color: '#4ade80' },
-    { name: 'CGTMSME', value: cgtmsmeLeads.length, color: '#a78bfa' },
-    { name: 'Mutual Fund', value: mutualFundLeads.length, color: '#8b5cf6' },
-    { name: 'Insurance', value: insuranceLeads.length, color: '#ec4899' },
-    { name: 'Other', value: otherLeads.length, color: '#f43f5e' }
-  ];
+  // const loanTypeData = [
+  //   { name: 'Home Loans', value: homeLoanLeads.length, color: '#3b82f6' },
+  //   { name: 'User Car Loans', value: userCarLoanLeads.length, color: '#f97316' },
+  //   { name: 'Business Loans', value: businessLoanLeads.length, color: '#f59e0b' },
+  //   { name: 'Personal Loans', value: personalLoanLeads.length, color: '#10b981' },
+  //   { name: 'DOD Loans', value: dodLoanLeads.length, color: '#f43f5e' },
+  //   { name: 'Mortgage Loans', value: mortgageLoanLeads.length, color: '#8b5cf6' },
+  //   { name: 'CC/OD', value: ccOdLeads.length, color: '#4ade80' },
+  //   { name: 'CGTMSME', value: cgtmsmeLeads.length, color: '#a78bfa' },
+  //   { name: 'Mutual Fund', value: mutualFundLeads.length, color: '#8b5cf6' },
+  //   { name: 'Insurance', value: insuranceLeads.length, color: '#ec4899' },
+  //   { name: 'Other', value: otherLeads.length, color: '#f43f5e' }
+  // ];
 
   // Leads over time data
   const leadsPerDay = leadsData.reduce((acc, lead) => {
@@ -417,13 +437,13 @@ const LeadsReport = () => {
             </div>
           </div>
 
-          {/*Follow ups Leads*/}
+          {/*LineUps Leads*/}
           <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-yellow-600">LineUps</p>
                 <p className="text-2xl font-bold text-yellow-800">
-                  {leadsData.filter(lead => lead.status === 'Follow up').length}
+                  {leadsData.filter(lead => lead.status === 'LineUp').length}
                 </p>
               </div>
               <div className="bg-yellow-100 p-2 rounded-full">
@@ -468,11 +488,6 @@ const LeadsReport = () => {
           {renderBarChart(leadStatusData, "Leads by Status")}
         </div>
 
-        {/* Leads by Loan Type Pie Chart */}
-        <div className="grid grid-cols-1 gap-6 mb-6">
-          {renderPieChart(loanTypeData, "Leads by Loan Type")}
-        </div>
-
         {/* Leads Table Section */}
         <div className="mb-6">
           {/* Search Box */}
@@ -482,7 +497,7 @@ const LeadsReport = () => {
             </div>
             <input
               type="text"
-              placeholder="Search leads by name, ID, phone, status or loan type..."
+              placeholder="Search leads by name, ID, phone or status..."
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -509,9 +524,9 @@ const LeadsReport = () => {
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Date
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Loan Type
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -530,7 +545,7 @@ const LeadsReport = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                           ${lead.status === 'Fresh Lead' ? 'bg-blue-100 text-blue-800' :
-                            lead.status === 'Follow up' ? 'bg-yellow-100 text-yellow-800' :
+                            lead.status === 'LineUp' ? 'bg-yellow-100 text-yellow-800' :
                             lead.status === 'Interested' ? 'bg-green-100 text-green-800' :
                             'bg-gray-100 text-gray-800'}`}>
                           {lead.status}
@@ -539,9 +554,9 @@ const LeadsReport = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {moment(lead.createdAt).format("DD MMM YYYY")}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {lead.loan_type}
-                      </td>
+                      </td> */}
                     </tr>
                   ))
                 ) : (

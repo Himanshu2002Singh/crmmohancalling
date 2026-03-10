@@ -33,7 +33,7 @@ const Home = () => {
   const callBackLeads = leads.filter(lead => lead.status === 'Call Back');
   const noRequirementLeads = leads.filter(lead => lead.status === 'No Requirement');
   const followUps = leads.filter(lead => lead.status === 'Follow up');
-  const interviewRejects = leads.filter(lead => lead.status === 'Interview Reject');
+  const interviewRejects = leads.filter(lead => lead.status === 'Interview Rejected');
   const interviewPending = leads.filter(lead => lead.status === 'Interview Pending');
   const interviewDone = leads.filter(lead => lead.status === 'Interview Done');
   const interviewSelected = leads.filter(lead => lead.status === 'Interview Selected');
@@ -91,14 +91,21 @@ const Home = () => {
 
   const fetchData = async (startDate, endDate) => {
     try {
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
       const callResponse = await axios.get(`${API_URL}/callsByDates`, {
         params: { startDate, endDate },
+        headers: { Authorization: `Bearer ${token}` },
       });
       const leadResponse = await axios.get(`${API_URL}/getLeadsByDate`, {
         params: { startDate, endDate },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      const employeeResponse = await axios.get(`${API_URL}/employees`);
-      const followupsResponse = await axios.get(`${API_URL}/getFollowupsCount`);
+      const employeeResponse = await axios.get(`${API_URL}/employees`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const followupsResponse = await axios.get(`${API_URL}/getFollowupsCount`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       // console.log(followupsResponse.data.data.todayLineups);
       setCalls(callResponse.data.calls);
       setLeads(leadResponse.data);

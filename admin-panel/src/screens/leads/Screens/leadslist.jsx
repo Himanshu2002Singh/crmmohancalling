@@ -51,6 +51,7 @@ const LeadsList = () => {
     console.log("================> ye func call hua")
     console.log(`${currentPage} ${itemsPerPage} ${fromDate} ${toDate} ${searchTerm}`);
     setIsLoading(true);
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
     try {
       const response = await axios.get(`${API_URL}/getLeadsForAdminPanel`, {
         params: {
@@ -60,6 +61,7 @@ const LeadsList = () => {
           fromDate: fromDate || "", 
           toDate: toDate || "",
         },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.status === 200) {
@@ -76,7 +78,10 @@ const LeadsList = () => {
   };
 
 useEffect(() => {
-  axios.get(`${API_URL}/employees`)
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+  axios.get(`${API_URL}/employees`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
     .then(res => {
       // Ensure res.data is an array
       // const employeeList = Array.isArray(res.data) ? res.data : res.data.employees;
@@ -90,8 +95,11 @@ useEffect(() => {
 
 const handleAssignPerson = async (leadId, value) => {
   const [empId, empName] = value.split("|");
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
   try {
-    await axios.put(`${API_URL}/leads/${leadId}`, { person_id: empId, owner: empName });
+    await axios.put(`${API_URL}/leads/${leadId}`, { person_id: empId, owner: empName }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     toast.success("Assigned successfully!");
     // window.location.reload();
 

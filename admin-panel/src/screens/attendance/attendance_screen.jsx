@@ -62,8 +62,10 @@ const AttendanceScreen = () => {
     const fetchAttendance = async () => {
       try {
         setLoading(true);
+        const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
         const response = await axios.get(
-          `${API_URL}/monthlyattendance/${selectedMonth}`
+          `${API_URL}/monthlyattendance/${selectedMonth}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setAttendanceData(response.data.attendance);
       } catch (error) {
@@ -80,7 +82,10 @@ const AttendanceScreen = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get(`${API_URL}/employees`);
+        const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+        const res = await axios.get(`${API_URL}/employees`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setEmployees(res.data.employees);
       } catch (error) {
         console.error("Error fetching employees:", error);

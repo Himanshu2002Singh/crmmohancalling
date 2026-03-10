@@ -26,11 +26,14 @@ const AddLead = ({ handleCloseaddcallformModal, employees = [] }) => {
     setIsLoading(true);
     setError("");
 
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+
     try {
       const response = await fetch(`${API_URL}/submit-lead`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: formData.name,

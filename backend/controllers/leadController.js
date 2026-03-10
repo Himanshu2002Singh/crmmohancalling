@@ -525,7 +525,7 @@ exports.getFilteredLeads = async (req, res) => {
     }
 
     const leads = await Lead.findAll({
-      attributes: ['lead_id', 'name', 'number', 'person_id', 'status', 'loan_type', 'createdAt'], // Only required fields
+      attributes: ['lead_id', 'name', 'number', 'person_id', 'status', 'createdAt'], // Only required fields
       where: whereClause,
       order: [["createdAt", "DESC"]],
     });

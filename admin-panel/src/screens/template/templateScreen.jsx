@@ -16,7 +16,10 @@ function TemplateScreen() {
   // Fetch templates
   const fetchTemplates = async () => {
     try {
-      const response = await axios.get(`${API_URL}/get_templates`);
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+      const response = await axios.get(`${API_URL}/get_templates`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setTemplates(response.data.data || []);
     } catch (error) {
       console.error('Error fetching templates:', error);
@@ -30,6 +33,7 @@ function TemplateScreen() {
   // Create template
   const handleSubmit = async () => {
     try {
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
       const formData = new FormData();
       formData.append('name', templateName);
       formData.append('description', templateBody);
@@ -38,7 +42,9 @@ function TemplateScreen() {
         formData.append('file', selectedFile);
       }
 
-      const response = await axios.post(`${API_URL}/create_template`, formData);
+      const response = await axios.post(`${API_URL}/create_template`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (response.data.success) {
         alert('Template created successfully!');
         fetchTemplates();
@@ -55,7 +61,10 @@ function TemplateScreen() {
   // Delete template
   const confirmDelete = async () => {
     try {
-      await axios.delete(`${API_URL}/delete_template/${selectedTemplateId}`);
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+      await axios.delete(`${API_URL}/delete_template/${selectedTemplateId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert('Template deleted successfully!');
       fetchTemplates();
       showDeleteConfirmModal(false);
