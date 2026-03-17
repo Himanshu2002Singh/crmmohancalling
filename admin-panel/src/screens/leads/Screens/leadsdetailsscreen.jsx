@@ -15,8 +15,9 @@ const LeadDetailScreen = () => {
   const [personNames, setPersonNames] = useState({});
   const [histories, setHistories] = useState([]);
   const [activeTab, setActiveTab] = useState("calls");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+
   const [totalPages, setTotalPages] = useState(0);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [updating, setUpdating] = useState(false);
@@ -116,12 +117,16 @@ const downloadexcel = () => {
 
   const fetchLeadDetails = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(`${API_URL}/getLead/${id}`);
       setLead(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching lead details: ", error);
+      setIsLoading(false);
     }
   };
+
 
   const fetchCallDetails = async () => {
     try {
@@ -227,8 +232,11 @@ const downloadexcel = () => {
         </button>
       </div>
 
-      {lead ? (
+      {isLoading ? (
+        <p>Loading lead details...</p>
+      ) : lead ? (
         <div className="border rounded p-4 mb-6 bg-gray-100">
+
           <p><strong>Name:</strong> {lead.name}</p>
           <p><strong>Email:</strong> {lead.email}</p>
           <p><strong>Phone:</strong> {lead.number}</p>
@@ -368,8 +376,8 @@ const downloadexcel = () => {
             </thead>
             <tbody>
               {calls.map((call, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="border px-4 py-2">{lead.owner || "N/A"}</td>
+              <tr key={index} className="hover:bg-gray-50">
+                  <td className="border px-4 py-2">{lead?.owner || "N/A"}</td>
                   <td className="border px-4 py-2">{call.number}</td>
                   <td className="border px-4 py-2">{call.remark}</td>
                   <td className="border px-4 py-2">{new Date(call.createdAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</td>
@@ -378,6 +386,7 @@ const downloadexcel = () => {
             </tbody>
           </table>
         </>
+
       ) : activeTab === "history" ? (
         <>
           <h2 className="text-xl font-bold mb-4">History Details</h2>
