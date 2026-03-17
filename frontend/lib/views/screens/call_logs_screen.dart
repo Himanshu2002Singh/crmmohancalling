@@ -51,7 +51,7 @@ class _CallLogsScreenState extends State<CallLogsScreen> {
     "All",
     "Interested",
     "Call Back",
-    "No Requirement",
+    "Not Interested",
     "Follow up",
     "Document Rejected",
     "Document Pending",
@@ -60,6 +60,7 @@ class _CallLogsScreenState extends State<CallLogsScreen> {
     "File Login",
     "Loan Section",
     "Loan Disbursement",
+    "Other",
   ];
 
   @override

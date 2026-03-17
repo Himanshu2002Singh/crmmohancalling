@@ -107,9 +107,11 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
   //   "Non-Priority",
   // ];
   List<String> statusOptions = [
+    "Fresh Lead",
     "Interested",
     "Call Back",
-    "No Requirement",
+    "Not Interested",
+    "Follow up",
     "LineUp",
     "LineUp Dropout",
     "Interview Rejected",
@@ -120,6 +122,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
     "1 Month Completed",
     "2 Months Completed",
     "3 Months Completed",
+    "Other",
   ];
   // List<String> loanType = [
   //   "Home Loan",
@@ -377,7 +380,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
               if (widget.title == "Add Lead") const SizedBox(height: 12),
 
               if (widget.title == "Add Lead")
-                if (statusController.text != "No Requirement")
+                if (statusController.text != "Not Interested")
                   GestureDetector(
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
@@ -422,7 +425,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                     ),
                   ),
               if (widget.title == "Add Lead")
-                if (statusController.text != "No Requirement")
+                if (statusController.text != "Not Interested")
                   SizedBox(height: 12),
 
               const SizedBox(height: 12),
@@ -540,7 +543,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
               //     setState(() {
               //       identityController = file;
               //     });
-              //   },
+              //   ),
               // ),
               // SizedBox(height: 10),
               // addDocumentContainer(
@@ -549,7 +552,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
               //     setState(() {
               //       fileDetailsController = file;
               //     });
-              //   },
+              //   ),
               // ),
               // SizedBox(height: 10),
               // CustomTextField(
@@ -788,75 +791,76 @@ class CustomDropdown extends StatelessWidget {
   //                 Navigator.pop(context);
   //               },
   //             ),
-              // InkWell(
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width,
-              //     padding: EdgeInsets.all(10),
-              //     decoration: BoxDecoration(
-              //       border: Border(
-              //         bottom: BorderSide(
-              //           color: Colors.black,
-              //           width: 1,
-              //           style: BorderStyle.solid,
-              //         ),
-              //       ),
-              //     ),
-              //     child: Text(
-              //       textAlign: TextAlign.center,
-              //       "Choose a picture",
-              //       style: TextStyle(fontWeight: FontWeight.bold),
-              //     ),
-              //   ),
-              //   onTap: () {
-              //     _pickImageFromGallery();
-              //     Navigator.pop(context);
-              //   },
-              // ),
+  //             InkWell(
+  //               child: Container(
+  //                 width: MediaQuery.of(context).size.width,
+  //                 padding: EdgeInsets.all(10),
+  //                 decoration: BoxDecoration(
+  //                   border: Border(
+  //                     bottom: BorderSide(
+  //                       color: Colors.black,
+  //                       width: 1,
+  //                       style: BorderStyle.solid,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 child: Text(
+  //                   textAlign: TextAlign.center,
+  //                   "Choose a picture",
+  //                   style: TextStyle(fontWeight: FontWeight.bold),
+  //                 ),
+  //               ),
+  //               onTap: () {
+  //                 _pickImageFromGallery();
+  //                 Navigator.pop(context);
+  //               },
+  //             ),
 
-              // InkWell(
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width,
-              //     padding: EdgeInsets.all(10),
-              //     decoration: BoxDecoration(
-              //       border: Border(
-              //         bottom: BorderSide(
-              //           color: Colors.black,
-              //           width: 1,
-              //           style: BorderStyle.solid,
-              //         ),
-              //       ),
-              //     ),
+  //             InkWell(
+  //               child: Container(
+  //                 width: MediaQuery.of(context).size.width,
+  //                 padding: EdgeInsets.all(10),
+  //                 decoration: BoxDecoration(
+  //                   border: Border(
+  //                     bottom: BorderSide(
+  //                       color: Colors.black,
+  //                       width: 1,
+  //                       style: BorderStyle.solid,
+  //                     ),
+  //                   ),
+  //                 ),
 
-              //     child: Text(
-              //       textAlign: TextAlign.center,
-              //       "Choose a PDF",
-              //       style: TextStyle(fontWeight: FontWeight.bold),
-              //     ),
-              //   ),
-              //   onTap: () {
-              //     _pickPdfFile();
-              //     Navigator.pop(context);
-              //   },
-              // ),
-              // InkWell(
-              //   child: Container(
-              //     padding: EdgeInsets.all(10),
-              //     width: MediaQuery.of(context).size.width,
-              //     // color: AppColors.primaryColor,
-              //     child: Text(
-              //       textAlign: TextAlign.center,
-              //       "Cancel",
-              //       style: TextStyle(fontWeight: FontWeight.bold),
-              //     ),
-              //   ),
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //   },
-              // ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
+  //                 child: Text(
+  //                   textAlign: TextAlign.center,
+  //                   "Choose a PDF",
+  //                   style: TextStyle(fontWeight: FontWeight.bold),
+  //                 ),
+  //               ),
+  //               onTap: () {
+  //                 _pickPdfFile();
+  //                 Navigator.pop(context);
+  //               },
+  //             ),
+  //             InkWell(
+  //               child: Container(
+  //                 padding: EdgeInsets.all(10),
+  //                 width: MediaQuery.of(context).size.width,
+  //                 // color: AppColors.primaryColor,
+  //                 child: Text(
+  //                   textAlign: TextAlign.center,
+  //                   "Cancel",
+  //                   style: TextStyle(fontWeight: FontWeight.bold),
+  //                 ),
+  //               ),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  // }
+

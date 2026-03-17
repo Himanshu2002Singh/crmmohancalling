@@ -362,11 +362,10 @@ const UserDetailScreen = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span
                           className={`font-medium ${
-                            task.status === "Completed"
-                              ? "text-green-600"
-                              : task.status === "On Going"
-                              ? "text-blue-600"
-                              : "text-gray-500"
+                            task.status === "Completed" ? "text-green-600" :
+                            task.status === "On Going" ? "text-blue-600" :
+                            task.status === "Other" ? "text-gray-600" :
+                            "text-gray-500"
                           }`}
                         >
                           {task.status}

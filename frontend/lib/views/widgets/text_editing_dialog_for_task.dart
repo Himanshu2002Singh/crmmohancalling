@@ -157,7 +157,7 @@ Future<void> showEditTaskDialog(Task task, BuildContext context) async {
                   DropdownButtonFormField<String>(
                     value: selectedStatus,
                     items:
-                        ["Initial", "On Going", "Completed"]
+                        ["Initial", "On Going", "Completed", "Other"]
                             .map(
                               (status) => DropdownMenuItem(
                                 value: status,

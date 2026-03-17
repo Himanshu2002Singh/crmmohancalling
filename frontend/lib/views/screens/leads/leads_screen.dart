@@ -49,7 +49,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     "All",
     "Interested",
     "Call Back",
-    "No Requirement",
+    "Not Interested",
     "LineUp",
     "LineUp Dropout",
     "Interview Rejected",
@@ -60,6 +60,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     "1 month Completed",
     "2 months Completed",
     "3 Months Completed",
+    "Other",
   ];
 
   @override

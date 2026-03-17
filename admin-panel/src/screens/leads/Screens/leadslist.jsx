@@ -287,12 +287,16 @@ const handleDownloadExcel = () => {
               <th className="p-4 text-left text-xs font-semibold text-gray-800">
                 Phonenumber
               </th>
-              <th className="p-4 text-left text-xs font-semibold text-gray-800">
+                <th className="p-4 text-left text-xs font-semibold text-gray-800">
                 Assigned to 
+              </th>
+              <th className="p-4 text-left text-xs font-semibold text-gray-800">
+                Status
               </th>
               <th className="p-4 text-left text-xs font-semibold text-gray-800">
                 Actions
               </th>
+
             </tr>
           </thead>
 
@@ -327,8 +331,20 @@ const handleDownloadExcel = () => {
                     </select>
                   )}
                 </td>
-
                 <td className="p-4">
+                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                    user.status === 'Joined' ? 'bg-green-100 text-green-800' :
+                    user.status === 'Interview Selected' || user.status === 'Interview Done' ? 'bg-blue-100 text-blue-800' :
+                    user.status === 'Interested' ? 'bg-yellow-100 text-yellow-800' :
+                    user.status === 'Fresh Lead' ? 'bg-indigo-100 text-indigo-800' :
+                    user.status === 'Other' ? 'bg-gray-100 text-gray-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {user.status || 'Fresh Lead'}
+                  </span>
+                </td>
+                <td className="p-4">
+
                   {/* <button className="mr-4" title="Edit">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

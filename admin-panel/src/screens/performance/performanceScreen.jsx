@@ -65,7 +65,7 @@ const PerformanceScreen = () => {
   const freshLeads = leads.filter(lead => lead.status === 'Fresh Lead').length;
   const interestedLeads = leads.filter(lead => lead.status === 'Interested');
   const callBackLeads = leads.filter(lead => lead.status === 'Call Back');
-  const noRequirementLeads = leads.filter(lead => lead.status === 'No Requirement');
+const notInterestedLeads = leads.filter(lead => lead.status === 'Not Interested');
   const lineUpLeads = leads.filter(lead => lead.status === 'LineUp');
   const lineUpDropoutLeads = leads.filter(lead => lead.status === 'LineUp Dropout');
   const interviewRejectedLeads = leads.filter(lead => lead.status === 'Interview Rejected');
@@ -81,7 +81,8 @@ const PerformanceScreen = () => {
   const taskStatusData = [
     { name: 'Initial', value: initialTasks, color: '#f59e0b' },
     { name: 'On Going', value: onGoingTasks, color: '#3b82f6' },
-    { name: 'Completed', value: completedTasks, color: '#10b981' }
+    { name: 'Completed', value: completedTasks, color: '#10b981' },
+    { name: 'Other', value: tasks.filter(task => task.status === 'Other').length, color: '#6b7280' }
   ];
 
   // Attendance status data for chart
@@ -95,7 +96,7 @@ const PerformanceScreen = () => {
     { name: 'Fresh Leads', value: freshLeads, color: '#f59e0b' },
     { name: "Interested", value: interestedLeads.length, color: "#10b981" },
     { name: "Call Back", value: callBackLeads.length, color: "#3b82f6" },
-    { name: "No Requirement", value: noRequirementLeads.length, color: "#ef4444" },
+{ name: "Not Interested", value: notInterestedLeads.length, color: "#ef4444" },
     { name: "LineUp", value: lineUpLeads.length, color: "#8b5cf6" },
     { name: "LineUp Dropout", value: lineUpDropoutLeads.length, color: "#f97316" },
     { name: "Interview Rejected", value: interviewRejectedLeads.length, color: "#dc2626" },
@@ -105,7 +106,8 @@ const PerformanceScreen = () => {
     { name: "Joined", value: joinedLeads.length, color: "#22c55e" },
     { name: "1 Month Completed", value: oneMonthCompletedLeads.length, color: "#84cc16" },
     { name: "2 Months Completed", value: twoMonthsCompletedLeads.length, color: "#a3e635" },
-    { name: "3 Months Completed", value: threeMonthsCompletedLeads.length, color: "#eab308" }
+    { name: "3 Months Completed", value: threeMonthsCompletedLeads.length, color: "#eab308" },
+    { name: "Other", value: leads.filter(lead => lead.status === 'Other').length, color: "#6b7280" }
   ];
 
   // Fetch all employees on component mount

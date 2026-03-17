@@ -290,7 +290,7 @@ class _CallDetailsScreenState extends State<CallDetailsScreen> {
                   items: [
                     "Interested",
                     "Call Back",
-                    "No Requirement",
+                    "Not Interested",
                     "LineUp",
                     "LineUp Droupout",
                     "Interview Rejected",
@@ -301,6 +301,7 @@ class _CallDetailsScreenState extends State<CallDetailsScreen> {
                     "1 month Completed",
                     "2 months Completed",
                     "3 Months Completed",
+                    "Other",
                   ],
                   onChanged: (val) => setState(() => feedbackStatus = val!),
                 ),

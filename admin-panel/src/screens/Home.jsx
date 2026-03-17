@@ -28,21 +28,30 @@ const Home = () => {
   const [todayFollowups, setTodayFollowups] = useState([]);
   const [tomorrowFollowups, setTomorrowFollowups] = useState([]);
   const [pendingFollowups, setPendingFollowups] = useState([]);
-  const freshLeads = leads.filter(lead=> lead.status==="Fresh Lead")
-  const interestedLeads = leads.filter(lead => lead.status === 'Interested');
-  const callBackLeads = leads.filter(lead => lead.status === 'Call Back');
-  const noRequirementLeads = leads.filter(lead => lead.status === 'No Requirement');
-  const followUps = leads.filter(lead => lead.status === 'Follow up');
-  const interviewRejects = leads.filter(lead => lead.status === 'Interview Rejected');
-  const interviewPending = leads.filter(lead => lead.status === 'Interview Pending');
-  const interviewDone = leads.filter(lead => lead.status === 'Interview Done');
-  const interviewSelected = leads.filter(lead => lead.status === 'Interview Selected');
-  const joined = leads.filter(lead => lead.status === 'Joined');
-  const oneMonthCompleted = leads.filter(lead => lead.status === '1 Month Completed');
-  const twoMonthsCompleted = leads.filter(lead => lead.status === '2 Months Completed');
-  const threeMonthsCompleted = leads.filter(lead => lead.status === '3 Months Completed');
-  const lineUpDropout = leads.filter(lead => lead.status === 'LineUp Dropout');
-  const lineUp = leads.filter(lead => lead.status === 'LineUp');
+  const leadStatuses = [
+    "Fresh Lead", "Interested", "Call Back", "Not Interested", "Follow up",
+    "Interview Rejected", "Interview Pending", "Interview Done", "Interview Selected",
+    "Joined", "1 Month Completed", "2 Months Completed", "3 Months Completed",
+    "LineUp Dropout", "LineUp", "Other"
+  ];
+
+  const getStatusLeads = (status) => leads.filter(lead => lead.status === status);
+  const freshLeads = getStatusLeads("Fresh Lead");
+  const interestedLeads = getStatusLeads("Interested");
+  const callBackLeads = getStatusLeads("Call Back");
+  const notInterestedLeads = getStatusLeads("Not Interested");
+  const followUps = getStatusLeads("Follow up");
+  const interviewRejects = getStatusLeads("Interview Rejected");
+  const interviewPending = getStatusLeads("Interview Pending");
+  const interviewDone = getStatusLeads("Interview Done");
+  const interviewSelected = getStatusLeads("Interview Selected");
+  const joined = getStatusLeads("Joined");
+  const oneMonthCompleted = getStatusLeads("1 Month Completed");
+  const twoMonthsCompleted = getStatusLeads("2 Months Completed");
+  const threeMonthsCompleted = getStatusLeads("3 Months Completed");
+  const lineUpDropout = getStatusLeads("LineUp Dropout");
+  const lineUp = getStatusLeads("LineUp");
+  const otherLeads = getStatusLeads("Other");
   // const fileLogins = leads.filter(lead => lead.status === 'File Login');
   // const loanSections = leads.filter(lead => lead.status === 'Loan Section');
   // const loanDisbursements = leads.filter(lead => lead.status === 'Loan Disbursement');
@@ -156,6 +165,8 @@ const Home = () => {
       setModalLeads(joined);
     } else if (title === 'Interview Pending') {
       setModalLeads(interviewPending);
+    } else if (title === 'Other') {
+      setModalLeads(otherLeads);
     } else if (title === 'Today LineUps') {
       setModalLeads(todayFollowups);
     } else if(title === 'Tomorrow LineUps') {
@@ -190,25 +201,15 @@ const Home = () => {
     { title: 'Joined', value: joined.length, icon: <FileText className="w-5 h-5" /> },
     { title: 'Interview Pending', value: interviewPending.length, icon: <XCircle className="w-5 h-5" /> },
     { title: 'Fresh Leads', value: freshLeads.length, icon: <Users className="w-5 h-5" /> },
-    { title: 'LineUp Dropout', value: lineUpDropout.length, icon: <Calendar className="w-5 h-5" /> }
+    { title: 'LineUp Dropout', value: lineUpDropout.length, icon: <Calendar className="w-5 h-5" /> },
+    { title: 'Other', value: otherLeads.length, icon: <Users className="w-5 h-5 text-gray-500" /> }
   ];
 
-  const leadsData = [
-    { name: "Fresh Leads", value: freshLeads, color: "#6366f1" },
-    { name: "Interested", value: interestedLeads.length, color: "#3b82f6" },
-    { name: "Call Back", value: callBackLeads.length, color: "#60a5fa" },
-    { name: "No Requirement", value: noRequirementLeads.length, color: "#94a3b8" },
-    { name: "LineUp", value: lineUp.length, color: "#8b5cf6" },
-    { name: "LineUp Dropout", value: lineUpDropout.length, color: "#f43f5e" },
-    { name: "Interview Rejected", value: interviewRejects.length, color: "#10b981" },
-    { name: "Interview Pending", value: interviewPending.length, color: "#f59e0b" },
-    { name: "Interview Done", value: interviewDone.length, color: "#f87171" },
-    { name: "Interview Selected", value: interviewSelected.length, color: "#ec4899" },
-    { name: "Joined", value: joined.length, color: "#22c55e" },
-    { name: "1 Month Completed", value: oneMonthCompleted.length, color: "#ec4899" },
-    { name: "2 Months Completed", value: twoMonthsCompleted.length, color: "#22d3ee" },
-    { name: "3 Months Completed", value: threeMonthsCompleted.length, color: "#14b8a6" },
-  ];
+  const leadsData = leadStatuses.map(status => ({
+    name: status.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+    value: getStatusLeads(status).length, 
+    color: status === "Other" ? "#6b7280" : status === "Not Interested" ? "#ef4444" : ["#6366f1", "#3b82f6", "#60a5fa", "#94a3b8", "#8b5cf6", "#f43f5e", "#10b981", "#f59e0b", "#f87171", "#ec4899", "#22c55e", "#ec4899", "#22d3ee", "#14b8a6", "#6b7280"][leadStatuses.indexOf(status) % 15]
+  }));
 
   // const pieData = [
   //   { name: 'Home Loans', value: homeLoanLeads.length, color: '#3b82f6' },

@@ -37,8 +37,8 @@ const LeadsReport = () => {
     "All",
     "Fresh Lead",
     "Interested",
-    "Call Back",
-    "No Requirement",
+    "Call Back",    
+    "Not Interested",   
     "LineUp",
     "LineUp Dropout",
     "Interview Rejected",
@@ -48,7 +48,8 @@ const LeadsReport = () => {
     "Joined",
     "1 Month Completed",
     "2 Months Completed",
-    "3 Months Completed"
+    "3 Months Completed",
+    "Other"
   ];
 
   // Set default date range (current month)
@@ -144,7 +145,7 @@ const LeadsReport = () => {
   const freshLeads = leadsData.filter(lead => lead.status === 'Fresh Lead').length;
   const interestedLeads = leadsData.filter(lead => lead.status === 'Interested');
   const callBackLeads = leadsData.filter(lead => lead.status === 'Call Back');
-  const noRequirementLeads = leadsData.filter(lead => lead.status === 'No Requirement');
+  const notInterestedLeads = leadsData.filter(lead => lead.status === 'Not Interested');
   const lineUpLeads = leadsData.filter(lead => lead.status === 'LineUp');
   const lineUpDropoutLeads = leadsData.filter(lead => lead.status === 'LineUp Dropout');
   const interviewRejectedLeads = leadsData.filter(lead => lead.status === 'Interview Rejected');
@@ -160,7 +161,7 @@ const LeadsReport = () => {
     { name: 'Fresh Leads', value: freshLeads, color: '#f59e0b' },
     { name: "Interested", value: interestedLeads.length, color: "#10b981" },
     { name: "Call Back", value: callBackLeads.length, color: "#3b82f6" },
-    { name: "No Requirement", value: noRequirementLeads.length, color: "#ef4444" },
+    { name: "Not Interested", value: notInterestedLeads.length, color: "#ef4444" },
     { name: "LineUp", value: lineUpLeads.length, color: "#8b5cf6" },
     { name: "LineUp Dropout", value: lineUpDropoutLeads.length, color: "#f97316" },
     { name: "Interview Rejected", value: interviewRejectedLeads.length, color: "#dc2626" },
@@ -170,7 +171,8 @@ const LeadsReport = () => {
     { name: "Joined", value: joinedLeads.length, color: "#22c55e" },
     { name: "1 Month Completed", value: oneMonthCompletedLeads.length, color: "#84cc16" },
     { name: "2 Months Completed", value: twoMonthsCompletedLeads.length, color: "#a3e635" },
-    { name: "3 Months Completed", value: threeMonthsCompletedLeads.length, color: "#eab308" }
+    { name: "3 Months Completed", value: threeMonthsCompletedLeads.length, color: "#eab308" },
+    { name: "Other", value: leadsData.filter(lead => lead.status === 'Other').length, color: "#6b7280" }
   ];
 
   // Loan type counts - Removed as not needed
@@ -547,6 +549,7 @@ const LeadsReport = () => {
                           ${lead.status === 'Fresh Lead' ? 'bg-blue-100 text-blue-800' :
                             lead.status === 'LineUp' ? 'bg-yellow-100 text-yellow-800' :
                             lead.status === 'Interested' ? 'bg-green-100 text-green-800' :
+                            lead.status === 'Other' ? 'bg-gray-100 text-gray-800' :
                             'bg-gray-100 text-gray-800'}`}>
                           {lead.status}
                         </span>

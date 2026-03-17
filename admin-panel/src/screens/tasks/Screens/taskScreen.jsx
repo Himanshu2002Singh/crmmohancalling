@@ -142,7 +142,7 @@ function TaskScreen() {
                           <span className={`px-2 py-1 rounded-full text-xs font-semibold ${task.priority === "High" ? "bg-red-100 text-red-600" : task.priority === "Medium" ? "bg-yellow-100 text-yellow-600" : "bg-green-100 text-green-600"}`}>{task.priority}</span>
                         </td>
                         <td className="p-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${task.status === "Completed" ? "bg-green-100 text-green-600" : task.status === "On Going" ? "bg-blue-100 text-blue-600" : "bg-gray-200 text-gray-600"}`}>{task.status}</span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${task.status === "Completed" ? "bg-green-100 text-green-600" : task.status === "On Going" ? "bg-blue-100 text-blue-600" : task.status === "Other" ? "bg-gray-200 text-gray-600" : "bg-gray-200 text-gray-600"}`}>{task.status}</span>
                         </td>
                         <td className="p-3">
                           <span className="cursor-pointer text-blue-500 hover:underline" title={task.description} onClick={() => setModalDesc(task.description)}>

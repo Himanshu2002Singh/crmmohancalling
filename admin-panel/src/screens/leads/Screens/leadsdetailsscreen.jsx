@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import API_URL from "../../../config";
 import * as XLSX from "xlsx";
 
@@ -17,7 +18,19 @@ const LeadDetailScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [newStatus, setNewStatus] = useState('');
+  const [newRemark, setNewRemark] = useState('');
+  const [newNextMeeting, setNewNextMeeting] = useState('');
   const itemsPerPage = 50;
+
+  const statusOptions = [
+    'Fresh Lead', 'Interested', 'Call Back', 'Not Interested', 'Follow up',
+    'Interview Rejected', 'Interview Pending', 'Interview Done', 'Interview Selected',
+    'Joined', '1 Month Completed', '2 Months Completed', '3 Months Completed',
+    'LineUp Dropout', 'LineUp', 'Other',
+  ];
 
 const downloadexcel = () => {
   // Prepare calls data
@@ -158,6 +171,43 @@ const downloadexcel = () => {
     }
   }
 
+  const updateStatus = async () => {
+    if (!newStatus) {
+      toast.error("Status is required");
+      return;
+    }
+    setUpdating(true);
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('superadminToken');
+    try {
+      const updateData = { status: newStatus };
+      if (newRemark) updateData.remark = newRemark;
+      if (newNextMeeting) updateData.next_meeting = newNextMeeting;
+      await axios.put(`${API_URL}/leads/${id}`, updateData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success("Status updated successfully!");
+      await fetchLeadDetails();
+      await fetchHistoryDetails();
+      setShowUpdateForm(false);
+      setNewStatus('');
+      setNewRemark('');
+      setNewNextMeeting('');
+    } catch (error) {
+      toast.error("Failed to update status");
+      console.error(error);
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  useEffect(() => {
+    if (lead) {
+      setNewStatus(lead.status || '');
+      setNewRemark(lead.remark || '');
+      setNewNextMeeting(lead.next_meeting ? lead.next_meeting.split('T')[0] : '');
+    }
+  }, [lead]);
+
   useEffect(() => {
     fetchLeadDetails();
     fetchCallDetails();
@@ -200,6 +250,78 @@ const downloadexcel = () => {
         </div>
       ) : (
         <p>Loading Lead details...</p>
+      )}
+
+      {lead && (
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold">Update Status</h3>
+            <button
+              onClick={() => setShowUpdateForm(!showUpdateForm)}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              {showUpdateForm ? 'Cancel' : 'Update Status'}
+            </button>
+          </div>
+          {showUpdateForm && (
+            <div className="bg-white border rounded-lg p-6 shadow-md">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">New Status *</label>
+                  <select
+                    value={newStatus}
+                    onChange={(e) => setNewStatus(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">Select Status</option>
+                    {statusOptions.map((option) => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Next Meeting</label>
+                  <input
+                    type="date"
+                    value={newNextMeeting}
+                    onChange={(e) => setNewNextMeeting(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div className="md:col-span-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Remark</label>
+                  <textarea
+                    value={newRemark}
+                    onChange={(e) => setNewRemark(e.target.value)}
+                    rows={3}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Optional remark for status change..."
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setShowUpdateForm(false);
+                    setNewStatus('');
+                    setNewRemark('');
+                    setNewNextMeeting('');
+                  }}
+                  className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={updateStatus}
+                  disabled={updating || !newStatus}
+                  className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-green-300 disabled:cursor-not-allowed"
+                >
+                  {updating ? 'Updating...' : 'Update Status'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Toggle */}

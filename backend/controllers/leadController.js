@@ -130,19 +130,39 @@ exports.importLeadsFromExcel = async (req, res) => {
 
 exports.updateLead = async (req, res) => {
     const { id } = req.params;
-    const updateData = req.body;  // Accept any fields from the request body
+    const updateData = req.body;
+    const user = req.user;  // From isAuthenticated middleware
 
     if (!id) {
         return res.status(400).json({ message: 'Lead ID is required' });
     }
 
     try {
+        // Get original lead
+        const originalLead = await Lead.findByPk(id);
+        if (!originalLead) {
+            return res.status(404).json({ message: 'Lead not found' });
+        }
+
+        // Update lead
         const [updated] = await Lead.update(updateData, {
             where: { lead_id: id }
         });
 
         if (updated === 0) {
-            return res.status(404).json({ message: 'Lead not found or no changes made' });
+            return res.status(404).json({ message: 'No changes made' });
+        }
+
+        // Auto-log to history if status changed
+        if (updateData.status && originalLead.status !== updateData.status) {
+            const History = require('../models/historyModel');
+            await History.create({
+                lead_id: parseInt(id),
+                status: updateData.status,
+                remark: updateData.remark || '',
+                next_meeting: updateData.next_meeting ? new Date(updateData.next_meeting) : null,
+                owner: user?.name || user?.username || user?.id || 'Admin'
+            });
         }
 
         res.status(200).json({ message: 'Lead updated successfully' });

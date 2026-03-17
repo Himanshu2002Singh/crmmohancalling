@@ -8,18 +8,22 @@ class DynamicBarChart extends StatelessWidget {
   DynamicBarChart({Key? key, required this.leads}) : super(key: key);
 
   final List<String> statusList = [
+    "Fresh Lead",
     "Interested",
     "Call Back",
-    "No Requirement",
+    "Not Interested",
     "Follow up",
+    "LineUp",
+    "LineUp Dropout",
     "Interview Rejected",
     "Interview Pending",
     "Interview Done",
     "Interview Selected",
     "Joined",
-    "1 month Completed",
-    "2 months Completed",
+    "1 Month Completed",
+    "2 Months Completed",
     "3 Months Completed",
+    "Other",
   ];
 
   final List<Color> boxColorList = [
@@ -35,6 +39,7 @@ class DynamicBarChart extends StatelessWidget {
     Colors.pink,
     Colors.amber,
     Colors.lightGreenAccent,
+    Colors.grey,
   ];
 
   @override
