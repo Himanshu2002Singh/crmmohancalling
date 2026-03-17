@@ -1,6 +1,6 @@
 
 <div align="center" class="text-center">
-<h1>CAPITAL CAREFULL</h1>
+<h1>CAPITAL  CAREFULL</h1>
 <p><em>Empowering Growth Through Smarter Financial Leadership</em></p>
 
 <img alt="last-commit" src="https://img.shields.io/github/last-commit/Himanshu2002Singh/capitalcarefull?style=flat&amp;logo=git&amp;logoColor=white&amp;color=0080ff" class="inline-block mx-1" style="margin: 0px 2px;">
